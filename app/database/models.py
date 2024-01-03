@@ -23,8 +23,8 @@ class Aircrafts(Base):
 
     __table_args__ = (CheckConstraint("range > 0"),)
 
-    flights = relationship("Flights", back_populates="aircrafts")
-    seats = relationship("Seats", back_populates="aircrafts", cascade="all, delete")
+    # flights = relationship("Flights", back_populates="aircrafts")
+    # seats = relationship("Seats", back_populates="aircrafts", cascade="all, delete")
 
 
 class Airports(Base):
@@ -49,8 +49,8 @@ class TicketFlights(Base):
     fare_conditions = Column(Integer, nullable=False)
     amount = Column(Numeric(10, 2), nullable=False)
 
-    ticket = relationship("Ticket", back_populates="flights")
-    flight = relationship("Flight", back_populates="tickets")
+    # ticket = relationship("Ticket", back_populates="flights")
+    # flight = relationship("Flight", back_populates="tickets")
 
     __table_args__ = (
         CheckConstraint("amount >= 0"),
@@ -65,7 +65,7 @@ class Bookings(Base):
     book_date = Column(DateTime(timezone=True), nullable=False)
     total_amount = Column(Numeric(10, 2), nullable=False)
 
-    tickets = relationship("Ticket", back_populates="booking")
+    # tickets = relationship("Ticket", back_populates="booking")
 
 
 class Seats(Base):
@@ -79,7 +79,7 @@ class Seats(Base):
         CheckConstraint("fare_conditions IN ('Economy', 'Comfort', 'Business')"),
     )
 
-    aircrafts = relationship("Aircrafts", back_populates="seats", cascade="all, delete")
+    # aircrafts = relationship("Aircrafts", back_populates="seats", cascade="all, delete")
 
 
 class Flights(Base):
@@ -87,8 +87,8 @@ class Flights(Base):
 
     flight_id = Column(Integer, primary_key=True)
     flight_no = Column(String(6), nullable=False)
-    scheduled_departure = Column(DateTime, nullable=False)
-    scheduled_arrival = Column(DateTime, nullable=False)
+    scheduled_departure = Column(DateTime(timezone=True), nullable=False)
+    scheduled_arrival = Column(DateTime(timezone=True), nullable=False)
     departure_airport = Column(
         String(3), ForeignKey("airports.airport_code"), nullable=False
     )
@@ -99,13 +99,13 @@ class Flights(Base):
     aircraft_code = Column(
         String(3), ForeignKey("aircrafts.aircraft_code"), nullable=False
     )
-    actual_departure = Column(DateTime)
-    actual_arrival = Column(DateTime)
+    actual_departure = Column(DateTime(timezone=True))
+    actual_arrival = Column(DateTime(timezone=True))
 
-    aircraft = relationship("Aircraft", back_populates="flights")
-    departure = relationship("Airport", foreign_keys=[departure_airport])
-    arrival = relationship("Airport", foreign_keys=[arrival_airport])
-    ticket_flights = relationship("TicketFlights", back_populates="flights")
+    # aircraft = relationship("Aircraft", back_populates="flights")
+    # departure = relationship("Airport", foreign_keys=[departure_airport])
+    # arrival = relationship("Airport", foreign_keys=[arrival_airport])
+    # ticket_flights = relationship("TicketFlights", back_populates="flights")
 
     __table_args__ = (
         CheckConstraint("scheduled_arrival > scheduled_departure"),
@@ -145,5 +145,5 @@ class Ticket(Base):
     passenger_name = Column(String, nullable=False)
     contact_data = Column(JSONB)
 
-    booking = relationship("Bookings", back_populates="tickets")
-    ticket_flights = relationship("TicketFlights", back_populates="ticket")
+    # booking = relationship("Bookings", back_populates="tickets")
+    # ticket_flights = relationship("TicketFlights", back_populates="ticket")
